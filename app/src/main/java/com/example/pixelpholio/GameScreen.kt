@@ -34,6 +34,8 @@ import kotlinx.coroutines.isActive
 import androidx.compose.foundation.Image
 import androidx.compose.ui.res.painterResource
 
+import androidx.compose.ui.res.painterResource
+
 
 @Composable
 fun GameScreen() {
@@ -70,13 +72,15 @@ fun GameScreen() {
         ScrollingGameBackground()
 
         // 🎮 Player
-        Canvas(modifier = Modifier.fillMaxSize()) {
-            drawRect(
-                color = Color.Cyan,
-                topLeft = Offset(playerX, playerY),
-                size = Size(60f, 60f)
-            )
-        }
+        Image(
+            painter = painterResource(id = R.drawable.player_idle),
+            contentDescription = "Player Sprite",
+            modifier = Modifier
+                .offset { IntOffset(playerX.toInt(), playerY.toInt()) }
+                .size(64.dp), // or adjust as needed
+            contentScale = ContentScale.Fit
+        )
+
 
         // 🕹️ Joystick
         Joystick(

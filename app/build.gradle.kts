@@ -1,7 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    id("org.jetbrains.kotlin.plugin.compose") // <- ADD THIS LINE
+    id("org.jetbrains.kotlin.plugin.compose")
 }
 
 android {
@@ -60,4 +60,12 @@ dependencies {
 
     // Optional for Canvas debugging:
     debugImplementation("androidx.compose.ui:ui-tooling") // BOM should manage version
+    testImplementation(kotlin("test"))
+    // JUnit test dependencies
+    testImplementation("junit:junit:4.13.2")
+
+// Android Instrumented Tests
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+
 }

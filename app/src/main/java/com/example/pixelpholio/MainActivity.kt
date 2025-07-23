@@ -1,14 +1,11 @@
 package com.example.pixelpholio
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 
 import android.media.MediaPlayer
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import com.example.pixelpholio.ui.theme.PixelpholioTheme
 
 class MainActivity : ComponentActivity() {
@@ -18,8 +15,10 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // 🎵 Load bg music
         mediaPlayer = MediaPlayer.create(this, R.raw.sm)
         mediaPlayer?.isLooping = true
+        mediaPlayer?.setVolume(0.7f, 0.7f)
 
         setContent {
             PixelpholioTheme {
@@ -44,18 +43,14 @@ class MainActivity : ComponentActivity() {
         mediaPlayer = null
     }
 }
-
-
 @Composable
 fun AppContent(startMusic: () -> Unit) {
-    var currentScreen by remember { mutableStateOf("splash") }
-
-    androidx.activity.compose.BackHandler(enabled = currentScreen != "menu") {
-        currentScreen = "menu"
+    var currentScreen by remember { mutableStateOf("start") }
+    BackHandler(enabled = currentScreen != "menu") {
+        currentScreen = "menu" // 👈 Return to menu when back pressed
     }
-
     when (currentScreen) {
-        "splash" -> SplashScreen {
+        "start" -> StartScreen {
             currentScreen = "menu"
             startMusic()
         }

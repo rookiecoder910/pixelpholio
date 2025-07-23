@@ -1,51 +1,36 @@
 package com.example.pixelpholio
-import kotlinx.coroutines.launch
 
 import android.media.MediaPlayer
 import androidx.compose.animation.animateColor
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+// 👇 StartScreen — Tap to continue
 @Composable
-fun MenuScreen(
-    onPlayClick: () -> Unit,
-    onSkillClick: () -> Unit
-) {
-    Box(modifier = Modifier.fillMaxSize()) {
+fun StartScreen(onTap: () -> Unit) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .clickable { onTap() }
+    ) {
         MovingBackgroundImage()
-
-        val context = LocalContext.current
-
-
-        val clickSound = remember {
-            try {
-                MediaPlayer.create(context, R.raw.button_click)
-            } catch (e: Exception) {
-                null
-            }
-        }
-
-        val infiniteTransition = rememberInfiniteTransition(label = "glow")
-        val animatedBorderColor by infiniteTransition.animateColor(
-            initialValue = Color.Cyan,
-            targetValue = Color.Magenta,
-            animationSpec = infiniteRepeatable(
-                animation = tween(durationMillis = 1200, easing = FastOutSlowInEasing),
-                repeatMode = RepeatMode.Reverse
-            ),
-            label = "button border glow"
-        )
 
         Column(
             modifier = Modifier
@@ -58,85 +43,128 @@ fun MenuScreen(
                 text = "🎮 Pixelpholio",
                 fontSize = 34.sp,
                 fontWeight = FontWeight.ExtraBold,
-                color = Color.Cyan
+                color = Color.White
             )
 
-            Spacer(modifier = Modifier.height(40.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
-            BouncyButton(
-                onClick = {
-                    clickSound?.start()
-                    onPlayClick()
-                },
-                borderColor = animatedBorderColor
+            Text(
+                text = "✨ Tap anywhere to begin",
+                fontSize = 16.sp,
+                color = Color.LightGray
+            )
+        }
+    }
+}
+
+// 👇 MenuScreen — Actual menu with buttons
+@Composable
+fun MenuScreen(
+    onPlayClick: () -> Unit,
+    onSkillClick: () -> Unit
+) {
+    val context = LocalContext.current
+
+
+    val clickSound = remember {
+        try {
+            MediaPlayer.create(context, R.raw.button_click)
+        } catch (e: Exception) {
+            null
+        }
+    }
+
+
+    val infiniteTransition = rememberInfiniteTransition(label = "glow")
+    val animatedBorderColor by infiniteTransition.animateColor(
+        initialValue = Color.Black,
+        targetValue = Color.White,
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 1200, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "glowColor"
+    )
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        MovingBackgroundImage()
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            // ▶ Play Button with fitted brick background
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth(0.4f)
+                    .height(60.dp)
+                    .clip(RoundedCornerShape(16.dp)) // Match the button shape
             ) {
-                Text(
-                    text = "▶️ Play",
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = animatedBorderColor
+                Image(
+                    painter = painterResource(R.drawable.brick_texture),
+                    contentDescription = null,
+                    contentScale = ContentScale.FillBounds, // Stretch to fit
+                    modifier = Modifier.matchParentSize()
                 )
+
+                Button(
+                    onClick = onPlayClick,
+                    modifier = Modifier.matchParentSize(),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.Transparent,
+                        contentColor = Color.Cyan
+                    ),
+                    shape = RoundedCornerShape(16.dp),
+                    elevation = ButtonDefaults.buttonElevation(8.dp)
+                ) {
+                    Text(
+                        text = "▶Play",
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Center
+                    )
+                }
             }
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            BouncyButton(
-                onClick = {
-                    clickSound?.start()
-                    onSkillClick()
-                },
-                borderColor = animatedBorderColor
+            // 🧠 Showcase My Skills Button
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth(0.40f)
+                    .height(60.dp)
+                    .clip(RoundedCornerShape(16.dp))
             ) {
-                Text(
-                    text = "🧠 Skill Showcase",
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = animatedBorderColor
+                Image(
+                    painter = painterResource(R.drawable.brick_texture),
+                    contentDescription = null,
+                    contentScale = ContentScale.FillBounds,
+                    modifier = Modifier.matchParentSize()
                 )
+
+                Button(
+                    onClick = onSkillClick,
+                    modifier = Modifier.matchParentSize(),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.Transparent,
+                        contentColor = Color.Cyan
+                    ),
+                    shape = RoundedCornerShape(16.dp),
+                    elevation = ButtonDefaults.buttonElevation(8.dp)
+                ) {
+                    Text(
+                        text = "Showcase My Skills",
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Center
+                    )
+                }
             }
         }
-    }
-}
-@Composable
-fun BouncyButton(
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-    borderColor: Color = Color.Cyan,
-    content: @Composable () -> Unit
-) {
-    val scale = remember { Animatable(1f) }
-    val coroutineScope = rememberCoroutineScope()
 
-    Button(
-        onClick = {
-            coroutineScope.launch {
-                scale.animateTo(
-                    0.85f,
-                    animationSpec = tween(durationMillis = 100)
-                )
-                scale.animateTo(
-                    1f,
-                    animationSpec = spring(
-                        dampingRatio = Spring.DampingRatioMediumBouncy,
-                        stiffness = Spring.StiffnessLow
-                    )
-                )
-            }
-            onClick()
-        },
-        modifier = modifier
-            .graphicsLayer {
-                scaleX = scale.value
-                scaleY = scale.value
-            }
-            .fillMaxWidth(0.6f)
-            .height(52.dp),
-        colors = ButtonDefaults.outlinedButtonColors(
-            containerColor = Color.Transparent,
-            contentColor = borderColor
-        ),
-        border = BorderStroke(2.dp, borderColor)
-    ) {
-        content()
     }
 }
+
+
+
+

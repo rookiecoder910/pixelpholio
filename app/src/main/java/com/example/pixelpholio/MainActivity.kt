@@ -1,5 +1,7 @@
 package com.example.pixelpholio
 
+import MenuScreen
+import StartScreen
 import android.media.MediaPlayer
 import android.os.Bundle
 import androidx.activity.ComponentActivity

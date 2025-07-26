@@ -59,8 +59,8 @@ fun Joystick(
     ) {
         Canvas(modifier = Modifier.fillMaxSize()) {
             center = size.center
-            drawCircle(Color.DarkGray, radius)
-            drawCircle(Color.LightGray, radius / 2)
+            drawCircle(Color.White, radius)
+
             drawCircle(Color.Cyan, handleRadius, center = handlePosition.takeIf { it != Offset.Zero } ?: center)
         }
     }

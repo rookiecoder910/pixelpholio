@@ -1,28 +1,39 @@
-package com.example.pixelpholio
 
 import android.media.MediaPlayer
 import androidx.compose.animation.animateColor
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.pixelpholio.MovingBackgroundImage
+import com.example.pixelpholio.R
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
-// 👇 StartScreen — Tap to continue
+// 👇 StartScreen — Unchanged, for context
 @Composable
 fun StartScreen(onTap: () -> Unit) {
     Box(
@@ -57,7 +68,7 @@ fun StartScreen(onTap: () -> Unit) {
     }
 }
 
-// 👇 MenuScreen — Actual menu with buttons
+// ✨👇 NEW AND IMPROVED MENU SCREEN 👇✨
 @Composable
 fun MenuScreen(
     onPlayClick: () -> Unit,
@@ -65,106 +76,166 @@ fun MenuScreen(
 ) {
     val context = LocalContext.current
 
-
-    val clickSound = remember {
-        try {
-            MediaPlayer.create(context, R.raw.button_click)
-        } catch (e: Exception) {
-            null
+    // --- Sound Effect Management ---
+    val clickSound = remember { MediaPlayer.create(context, R.raw.button_click) }
+    DisposableEffect(Unit) {
+        onDispose {
+            clickSound?.release()
         }
     }
 
+    // --- Entrance Animations ---
+    val coroutineScope = rememberCoroutineScope()
+    val buttonsOffsetY = remember { Animatable(100f) }
+    val contentAlpha = remember { Animatable(0f) }
 
-    val infiniteTransition = rememberInfiniteTransition(label = "glow")
-    val animatedBorderColor by infiniteTransition.animateColor(
-        initialValue = Color.Black,
-        targetValue = Color.White,
-        animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 1200, easing = FastOutSlowInEasing),
-            repeatMode = RepeatMode.Reverse
-        ),
-        label = "glowColor"
-    )
+    LaunchedEffect(Unit) {
+        // Staggered animation: fade in, then slide buttons up
+        contentAlpha.animateTo(1f, animationSpec = tween(durationMillis = 300))
+        buttonsOffsetY.animateTo(
+            0f,
+            animationSpec = spring(
+                dampingRatio = Spring.DampingRatioMediumBouncy,
+                stiffness = Spring.StiffnessLow
+            )
+        )
+    }
 
     Box(modifier = Modifier.fillMaxSize()) {
         MovingBackgroundImage()
         Column(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .alpha(contentAlpha.value) // Apply fade-in to all content
+                .offset(y = buttonsOffsetY.value.dp), // Apply slide-up to all content
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // ▶ Play Button with fitted brick background
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth(0.4f)
-                    .height(60.dp)
-                    .clip(RoundedCornerShape(16.dp)) // Match the button shape
-            ) {
-                Image(
-                    painter = painterResource(R.drawable.brick_texture),
-                    contentDescription = null,
-                    contentScale = ContentScale.FillBounds, // Stretch to fit
-                    modifier = Modifier.matchParentSize()
-                )
-
-                Button(
-                    onClick = onPlayClick,
-                    modifier = Modifier.matchParentSize(),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color.Transparent,
-                        contentColor = Color.Cyan
-                    ),
-                    shape = RoundedCornerShape(16.dp),
-                    elevation = ButtonDefaults.buttonElevation(8.dp)
-                ) {
-                    Text(
-                        text = "▶Play",
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold,
-                        textAlign = TextAlign.Center
-                    )
+            // Reusable, animated menu buttons
+            MenuButton(
+                text = " Play",
+                onClick = {
+                    coroutineScope.launch {
+                        clickSound?.start()
+                        delay(200) // Wait for sound to play
+                        onPlayClick()
+                    }
                 }
-            }
+            )
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            // 🧠 Showcase My Skills Button
+            MenuButton(
+                text = " Showcase My Skills",
+                onClick = {
+                    coroutineScope.launch {
+                        clickSound?.start()
+                        delay(200)
+                        onSkillClick()
+                    }
+                }
+            )
+        }
+    }
+}
+
+// ✨👇 REUSABLE, ANIMATED MENU BUTTON COMPOSABLE 👇✨
+
+@Composable
+private fun MenuButton(
+    text: String,
+    onClick: () -> Unit
+) {
+    val interactionSource = remember { MutableInteractionSource() }
+    val isPressed by interactionSource.collectIsPressedAsState()
+
+    // --- Animations for the button ---
+    val scale = animateFloatAsState(
+        targetValue = if (isPressed) 0.95f else 1f,
+        animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy),
+        label = "scale"
+    )
+
+    val infiniteTransition = rememberInfiniteTransition(label = "glow")
+    val animatedBorderColor by infiniteTransition.animateColor(
+        initialValue = Color.White.copy(alpha = 0.5f),
+        targetValue = Color.Cyan.copy(alpha = 0.8f),
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 1500, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "glowColor"
+    )
+    val shimmerTranslate by infiniteTransition.animateFloat(
+        initialValue = -1f,
+        targetValue = 2f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 2000, delayMillis = 500, easing = LinearEasing),
+            repeatMode = RepeatMode.Restart
+        ), label = "shimmer"
+    )
+
+    // --- Button Layout ---
+    Button(
+        onClick = onClick,
+        modifier = Modifier
+            .fillMaxWidth(0.6f)
+            .height(60.dp)
+            .scale(scale.value), // Apply press-down scale effect
+        interactionSource = interactionSource,
+        shape = RoundedCornerShape(16.dp),
+        colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
+        contentPadding = PaddingValues(0.dp),
+        elevation = ButtonDefaults.buttonElevation(defaultElevation = 8.dp, pressedElevation = 4.dp),
+        border = BorderStroke(2.dp, animatedBorderColor) // Glowing border
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .clip(RoundedCornerShape(16.dp)),
+            contentAlignment = Alignment.Center
+        ) {
+            // 1. Brick Texture Background
+            Image(
+                painter = painterResource(R.drawable.brick_texture),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.matchParentSize()
+            )
+
+            // ✅ 2. CORRECTED Shimmer Effect Overlay
+            // The Brush is now created inside the drawBehind modifier,
+            // which provides the correct `size`.
             Box(
                 modifier = Modifier
-                    .fillMaxWidth(0.40f)
-                    .height(60.dp)
-                    .clip(RoundedCornerShape(16.dp))
-            ) {
-                Image(
-                    painter = painterResource(R.drawable.brick_texture),
-                    contentDescription = null,
-                    contentScale = ContentScale.FillBounds,
-                    modifier = Modifier.matchParentSize()
-                )
+                    .matchParentSize()
+                    .drawBehind {
+                        val brush = Brush.horizontalGradient(
+                            colors = listOf(
+                                Color.White.copy(alpha = 0.0f),
+                                Color.White.copy(alpha = 0.4f),
+                                Color.White.copy(alpha = 0.0f)
+                            ),
+                            startX = (shimmerTranslate * size.width) - size.width,
+                            endX = (shimmerTranslate * size.width)
+                        )
+                        drawRect(brush = brush)
+                    }
+            )
 
-                Button(
-                    onClick = onSkillClick,
-                    modifier = Modifier.matchParentSize(),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color.Transparent,
-                        contentColor = Color.Cyan
-                    ),
-                    shape = RoundedCornerShape(16.dp),
-                    elevation = ButtonDefaults.buttonElevation(8.dp)
-                ) {
-                    Text(
-                        text = "Showcase My Skills",
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold,
-                        textAlign = TextAlign.Center
-                    )
-                }
-            }
+            // 3. Button Text
+            Text(
+                text = text,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.White,
+                textAlign = TextAlign.Center
+            )
         }
-
     }
 }
 
 
 
+// 👇 This would be your implementation
 

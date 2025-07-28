@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.pixelpholio.MovingBackgroundImage
 import com.example.pixelpholio.R
+import com.example.pixelpholio.pixelFontFamily
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -50,11 +51,15 @@ fun StartScreen(onTap: () -> Unit) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            Spacer(modifier = Modifier.height(12.dp))
+
             Text(
-                text = "🎮 Pixelpholio",
-                fontSize = 34.sp,
-                fontWeight = FontWeight.ExtraBold,
-                color = Color.White
+                text = "Jump into a pixel-powered dev adventure!",
+                fontSize = 38.sp,
+                fontWeight = FontWeight.Medium,
+                color = Color.White,
+                fontFamily = pixelFontFamily,
+                textAlign = TextAlign.Center
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -62,7 +67,8 @@ fun StartScreen(onTap: () -> Unit) {
             Text(
                 text = "✨ Tap anywhere to begin",
                 fontSize = 16.sp,
-                color = Color.LightGray
+                color = Color.LightGray,
+                fontFamily = pixelFontFamily
             )
         }
     }

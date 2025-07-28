@@ -13,6 +13,8 @@ import androidx.compose.ui.geometry.center
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import kotlin.math.sqrt
 fun Offset.coerceInCircle(center: Offset, maxDistance: Float): Offset {
@@ -31,14 +33,19 @@ fun Joystick(
     val handleRadius = 40f
     var center by remember { mutableStateOf(Offset.Zero) }
     var handlePosition by remember { mutableStateOf(Offset.Zero) }
+    var isTouching by remember { mutableStateOf(false) }
+
+    val context = LocalContext.current
 
     Box(
         modifier = modifier
-            .size(160.dp)
+            .fillMaxSize()
             .pointerInput(Unit) {
                 detectDragGestures(
                     onDragStart = { offset ->
+                        isTouching = true
                         center = offset
+                        handlePosition = offset
                     },
                     onDrag = { change, dragAmount ->
                         val newOffset = handlePosition + dragAmount
@@ -51,17 +58,32 @@ fun Joystick(
                         onMove(normalized)
                     },
                     onDragEnd = {
-                        handlePosition = center
+                        isTouching = false
+                        handlePosition = Offset.Zero
                         onMove(Offset.Zero)
                     }
                 )
             }
     ) {
-        Canvas(modifier = Modifier.fillMaxSize()) {
-            center = size.center
-            drawCircle(Color.White, radius)
+        if (isTouching) {
+            // Draw joystick at touch position
+            Canvas(
+                modifier = Modifier
+                    .fillMaxSize()
+            ) {
+                drawCircle(
+                    color = Color.White.copy(alpha = 0.5f),
+                    radius = radius,
+                    center = center
+                )
 
-            drawCircle(Color.Cyan, handleRadius, center = handlePosition.takeIf { it != Offset.Zero } ?: center)
+                drawCircle(
+                    color = Color.Cyan.copy(alpha = 0.8f),
+                    radius = handleRadius,
+                    center = handlePosition
+                )
+            }
         }
     }
 }
+

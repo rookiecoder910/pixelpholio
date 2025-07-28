@@ -54,7 +54,7 @@ dependencies {
     implementation(platform("androidx.compose:compose-bom:2023.10.01"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.material:material") // Consider using Material3 components more if you are using material3:1.2.0
-
+    implementation("androidx.navigation:navigation-compose:2.7.7")
     implementation("androidx.compose.ui:ui-tooling-preview") // BOM should manage version
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
 

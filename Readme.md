@@ -1,6 +1,6 @@
 # 🎮 Pixelpholio — A Gamified Android Developer Portfolio
 
-<img src="assets/banner.png" alt="Pixelpholio Banner" width="100%"/>
+<img src="assets/logo.png" alt="Pixelpholio Banner" width="100%"/>
 
 Pixelpholio is a **2D platformer built entirely using Jetpack Compose + Canvas**, where each collectible unlocks a *real* developer skill. It's not just a game — it's an interactive portfolio that lets you play through my experience as an Android developer.
 
@@ -16,6 +16,9 @@ Pixelpholio is a **2D platformer built entirely using Jetpack Compose + Canvas**
 |----------|------------------------|
 | ![Gameplay](assets/gameplay.png) | ![Skill Acquired](assets/skillacquire.png) |
 
+## 🎥 Demo Preview
+
+![Demo](assets/video.mp4)
 
 ## 🎯 Features
 

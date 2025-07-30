@@ -18,7 +18,8 @@ Pixelpholio is a **2D platformer built entirely using Jetpack Compose + Canvas**
 
 ## 🎥 Demo Preview
 
-![Demo](assets/video.mp4)
+[![Watch the Demo](https://img.youtube.com/vi/LyWWx-Oso9k/0.jpg)](https://youtu.be/LyWWx-Oso9k)
+
 
 ## 🎯 Features
 

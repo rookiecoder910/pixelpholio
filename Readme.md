@@ -10,11 +10,11 @@ Pixelpholio is a **2D platformer built entirely using Jetpack Compose + Canvas**
 
 | Start Screen | Skills Menu | Kotlin Skill Modal |
 |--------------|-------------|---------------------|
-| ![Start](assets/Screenshot_2025-07-30_210710.png) | ![Skills](screenshots/Screenshot_2025-07-30_210721.png) | ![Kotlin](screenshots/Screenshot_2025-07-30_210731.png) |
+| ![Start](assets/Screenshot_2025-07-30_210710.png) | ![Skills](assets/Screenshot_2025-07-30_210721.png) | ![Kotlin](assets/Screenshot_2025-07-30_210731.png) |
 
 | Gameplay | Skill Acquired Dialog |
 |----------|------------------------|
-| ![Gameplay](assets/Screenshot_2025-07-30_210754.png) | ![Skill](screenshots/Screenshot_2025-07-30_210935.png) |
+| ![Gameplay](assets/Screenshot_2025-07-30_210754.png) | ![Skill](assets/Screenshot_2025-07-30_210935.png) |
 
 ---
 

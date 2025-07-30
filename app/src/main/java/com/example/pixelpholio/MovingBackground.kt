@@ -36,7 +36,7 @@ fun MovingBackgroundImage() {
             awaitFrame()
             offsetX -= speed
             if (offsetX <= -screenWidthDp) {
-                offsetX += screenWidthDp // smoother reset
+                offsetX += screenWidthDp
             }
         }
     }
@@ -53,7 +53,7 @@ fun MovingBackgroundImage() {
                 .offset(x = offsetX.dp)
         )
 
-        // Second image (slightly overlapped to remove flicker)
+
         Image(
             painter = background,
             contentDescription = null,
@@ -61,7 +61,7 @@ fun MovingBackgroundImage() {
             modifier = Modifier
                 .fillMaxHeight()
                 .width(screenWidthDp.dp)
-                .offset(x = (offsetX + screenWidthDp - 1f).dp) // ← minus 1dp overlap
+                .offset(x = (offsetX + screenWidthDp - 1f).dp)
         )
     }
 }

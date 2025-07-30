@@ -13,7 +13,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape // For blocky shapes
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
@@ -23,8 +23,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-// --- ACTION REQUIRED: Add a pixel font to res/font/ ---
-// For example, download "Press Start 2P" from Google Fonts and name it 'pixel_font.ttf'
+
 val pixelFontFamily = FontFamily(
     Font(R.font.pixel_font, FontWeight.Normal)
 )
@@ -107,9 +106,9 @@ fun SkillShowcaseScreen() {
                 verticalArrangement = Arrangement.spacedBy(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                items(skillList) { skill -> // Here, 'skill' is a complete SkillBadge object
+                items(skillList) { skill ->
                     PixelatedSkillButton(skill = skill) {
-                        // , FIX: This block now correctly assigns the 'skill' objectnot a String.
+
                         selectedSkill = skill
                     }
                 }
@@ -117,7 +116,7 @@ fun SkillShowcaseScreen() {
 
             // 4. Thematic "Back" Button
             PixelatedSkillButton(
-                skill = SkillBadge("BACK", R.drawable.ic_back_arrow, ""), // ACTION: Add a back arrow icon
+                skill = SkillBadge("BACK", R.drawable.ic_back_arrow, ""),
                 onClick = {  }
             )
         }
@@ -135,7 +134,7 @@ fun SkillShowcaseScreen() {
 @Composable
 fun PixelatedSkillButton(skill: SkillBadge, onClick: () -> Unit) {
     Button(
-        onClick = onClick, // FIX: Just call onClick directly. Don't pass any arguments like skill.name.
+        onClick = onClick,
         shape = RectangleShape,
         modifier = Modifier
             .fillMaxWidth(0.85f)
@@ -182,7 +181,7 @@ fun SkillDetailDialog(skill: SkillBadge, onDismiss: () -> Unit) {
         title = {
             Text(
                 text = skill.name,
-                fontFamily = pixelFontFamily, // Use pixel font
+                fontFamily = pixelFontFamily,
                 fontSize = 22.sp,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth()
@@ -214,10 +213,10 @@ fun SkillDetailDialog(skill: SkillBadge, onDismiss: () -> Unit) {
                 }
             }
         },
-        shape = RectangleShape, // Blocky shape
-        containerColor = Color(0xFF1A1A1A), // Dark, solid color
+        shape = RectangleShape,
+        containerColor = Color(0xFF1A1A1A),
         titleContentColor = Color.White,
         textContentColor = Color.LightGray,
-        modifier = Modifier.border(2.dp, Color.White, RectangleShape) // Pixelated border
+        modifier = Modifier.border(2.dp, Color.White, RectangleShape)
     )
 }

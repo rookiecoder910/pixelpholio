@@ -54,7 +54,7 @@ fun StartScreen(onTap: () -> Unit) {
             Spacer(modifier = Modifier.height(12.dp))
 
             Text(
-                text = "Jump into a pixel-powered dev adventure!",
+                text = "PixelPholio",
                 fontSize = 38.sp,
                 fontWeight = FontWeight.Medium,
                 color = Color.White,

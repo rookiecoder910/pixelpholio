@@ -49,7 +49,7 @@ class MainActivity : ComponentActivity() {
 fun AppContent(startMusic: () -> Unit) {
     var currentScreen by remember { mutableStateOf("start") }
     BackHandler(enabled = currentScreen != "menu") {
-        currentScreen = "menu" // 👈 Return to menu when back pressed
+        currentScreen = "menu"
     }
     when (currentScreen) {
         "start" -> StartScreen {

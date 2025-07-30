@@ -1,33 +1,49 @@
-# 🎮 Pixelpholio – Game-Based Android Portfolio
+# 🎮 Pixelpholio — A Gamified Android Developer Portfolio
 
-Pixelpholio is a 2D platformer Android game that doubles as my interactive portfolio. Built with Jetpack Compose and Firebase, it lets users explore my skills and projects through gameplay mechanics — unlocking skills like Firebase, Debugging, and UI/UX as powerups!
+<img src="screenshots/banner.png" alt="Pixelpholio Banner" width="100%"/>
 
----
-
-## ✨ Features
-
-- 🎮 Joystick-controlled player movement with jump and dash
-- 🧱 Tile-based level with gravity and collision detection
-- 🍄 Skill unlocks (e.g., Firebase, UI/UX) as powerup mushrooms
-- 👾 Enemies like Goombas and Q-mark blocks with collectibles
-- 🌫️ Animated background, parallax clouds, sound effects
-- 📱 Built using Jetpack Compose Canvas and Android Studio
+Pixelpholio is a **2D platformer built entirely using Jetpack Compose + Canvas**, where each collectible unlocks a *real* developer skill. It's not just a game — it's an interactive portfolio that lets you play through my experience as an Android developer.
 
 ---
 
-## 🖼️ Screenshots
+## 📸 Screenshots
 
-> (Insert 2–3 gameplay screenshots here or use a GIF/demo video)
+| Start Screen | Skills Menu | Kotlin Skill Modal |
+|--------------|-------------|---------------------|
+| ![Start](screenshots/Screenshot_2025-07-30_210710.png) | ![Skills](screenshots/Screenshot_2025-07-30_210721.png) | ![Kotlin](screenshots/Screenshot_2025-07-30_210731.png) |
+
+| Gameplay | Skill Acquired Dialog |
+|----------|------------------------|
+| ![Gameplay](screenshots/Screenshot_2025-07-30_210754.png) | ![Skill](screenshots/Screenshot_2025-07-30_210935.png) |
+
+---
+
+## 🎯 Features
+
+- 🕹️ **Joystick Controls**: Built from scratch using Compose's Canvas API
+- 💡 **Gamified Skill Unlocks**: Collect in-game mushrooms to unlock real tech skills
+- 🎨 **Retro Art & UI**: Pixel-style backgrounds, dialogs, and animated sprites
+- 🧠 **Custom Skill Modals**: Clickable dialogs show off tools like Kotlin, Firebase, Jetpack Compose, etc.
+- 💥 **Sound Effects**: Feedback-rich audio with jump and collect actions
+- ❤️ **Hearts, Coins, and Enemies**: Health system, collectibles, and Goomba-style enemies
+- ⚡ **Skill Showcase Screen**: Explore the dev's toolbox from a retro Mario-style menu
+
+---
+
+## 🛠 Built With
+
+- **Kotlin**
+- **Jetpack Compose**
+- **Canvas API** for pixel-perfect rendering
+- **SoundPool** for audio
+- **Custom physics and collision engine**
+- **Jetpack Lifecycle**, `ViewModel`, and state management
 
 ---
 
 ## 🚀 Getting Started
 
-### Prerequisites
-- Android Studio Hedgehog or later
-- Kotlin 1.9+
-- Firebase account (for optional integration)
-
-### Clone the repository
+### Clone the Repo:
 ```bash
-git clone https://github.com/rookiecoder910/pixelpholio.git
+git clone https://github.com/yourusername/pixelpholio.git
+cd pixelpholio

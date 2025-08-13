@@ -1,0 +1,60 @@
+name: Update GSSoC Issue Tracker
+
+on:
+  # Run on issue events
+  issues:
+    types: [opened, closed, labeled, unlabeled, assigned, unassigned]
+  
+  # Run daily at 9 AM UTC
+  schedule:
+    - cron: '0 9 * * *'
+  
+  # Allow manual trigger
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: read
+
+jobs:
+  update-gssoc-tracker:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+        
+    - name: Install dependencies
+      run: |
+        pip install -r scripts/requirements.txt
+        
+    - name: Update GSSoC issue tracker
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        python scripts/update-gssoc-issues.py
+        
+    - name: Commit and push changes
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        
+        # Check if there are changes to commit
+        if git diff --exit-code Readme.md > /dev/null; then
+          echo "No changes to commit"
+        else
+          git add Readme.md
+          git commit -m "🤖 Update GSSoC issue tracker [automated]
+          
+          - Updated issue counts and lists
+          - Refreshed statistics
+          - Automated by GitHub Actions"
+          git push
+        fi
